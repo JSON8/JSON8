@@ -1,0 +1,134 @@
+[
+  {
+    "description": "Returns the same object for add operation",
+    "input": [{ "op": "add", "path": "/foo", "value": "bar" }],
+    "output": [{ "op": "add", "path": "/foo", "value": "bar" }]
+  },
+  {
+    "description": "Returns the same object for remove operation",
+    "input": [{ "op": "remove", "path": "/foo", "value": "bar" }],
+    "output": [{ "op": "remove", "path": "/foo", "value": "bar" }]
+  },
+  {
+    "description": "Returns the same object for replace operation",
+    "input": [{ "op": "replace", "path": "/foo", "value": "bar" }],
+    "output": [{ "op": "replace", "path": "/foo", "value": "bar" }]
+  },
+  {
+    "description": "Returns the same object for move operation",
+    "input": [{ "op": "move", "path": "/foo", "value": "bar" }],
+    "output": [{ "op": "move", "path": "/foo", "value": "bar" }]
+  },
+  {
+    "description": "Returns the same object for copy operation",
+    "input": [{ "op": "copy", "path": "/foo", "value": "bar" }],
+    "output": [{ "op": "copy", "path": "/foo", "value": "bar" }]
+  },
+  {
+    "description": "Returns the same object for test operation",
+    "input": [{ "op": "test", "path": "/foo", "value": "bar" }],
+    "output": [{ "op": "test", "path": "/foo", "value": "bar" }]
+  },
+  {
+    "description": "Returns the same object for different multiple operations",
+    "input": [
+      { "op": "add", "path": "/foo", "value": "bar" },
+      { "op": "add", "path": "/bar", "value": "baz" }
+    ],
+    "output": [
+      { "op": "add", "path": "/foo", "value": "bar" },
+      { "op": "add", "path": "/bar", "value": "baz" }
+    ]
+  },
+  {
+    "description": "Returns empty array, REMOVE cancelling ADD op",
+    "input": [
+      { "op": "add", "path": "/foo", "value": "bar" },
+      { "op": "remove", "path": "/foo" }
+    ],
+    "output": []
+  },
+  {
+    "description": "Returns empty array, REMOVE cancelling REPLACE op",
+    "input": [
+      { "op": "replace", "path": "/foo", "value": "bar" },
+      { "op": "remove", "path": "/foo" }
+    ],
+    "output": [{ "op": "remove", "path": "/foo" }]
+  },
+  {
+    "description": "Returns empty array, REMOVE cancelling COPY op",
+    "input": [
+      { "op": "copy", "from": "/bar", "path": "/foo" },
+      { "op": "remove", "path": "/foo" }
+    ],
+    "output": []
+  },
+  {
+    "description": "Returns empty array, REPLACE cancelling REPLACE op",
+    "input": [
+      { "op": "replace", "path": "/foo", "value": "bar" },
+      { "op": "replace", "path": "/foo", "value": "baz" }
+    ],
+    "output": [{ "op": "replace", "path": "/foo", "value": "baz" }]
+  },
+  {
+    "description": "Returns empty array, REPLACE cancelling COPY op",
+    "input": [
+      { "op": "copy", "from": "/bar", "path": "/foo" },
+      { "op": "replace", "path": "/foo", "value": "bar" }
+    ],
+    "output": [{ "op": "replace", "path": "/foo", "value": "bar" }]
+  },
+  {
+    "description": "Returns empty array, COPY cancelling REPLACE op",
+    "input": [
+      { "op": "replace", "path": "/foo", "value": "bar" },
+      { "op": "copy", "from": "/bar", "path": "/foo" }
+    ],
+    "output": [{ "op": "copy", "from": "/bar", "path": "/foo" }]
+  },
+  {
+    "description": "Should compact Patch with multiple cancelling operations",
+    "input": [
+      { "op": "add", "path": "/CEO", "value": "John" },
+      { "op": "add", "path": "/CFO", "value": "Anna" },
+      { "op": "add", "path": "/COO", "value": "Bruce" },
+      { "op": "replace", "path": "/CEO", "value": "Mike" },
+      { "op": "remove", "path": "/COO" },
+      { "op": "replace", "path": "/CEO", "value": "Beca" }
+    ],
+    "output": [
+      { "op": "add", "path": "/CEO", "value": "John" },
+      { "op": "add", "path": "/CFO", "value": "Anna" },
+      { "op": "replace", "path": "/CEO", "value": "Beca" }
+    ]
+  },
+  {
+    "description": "Should compact Patch with ADD, REPLACE, COPY and REMOVE ops",
+    "input": [
+      { "op": "add", "path": "/CEO", "value": "John" },
+      { "op": "add", "path": "/CFO", "value": "Anna" },
+      { "op": "add", "path": "/COO", "value": "Bruce" },
+      { "op": "replace", "path": "/CEO", "value": "Mike" },
+      { "op": "copy", "from": "/CFO", "path": "/CEO" },
+      { "op": "replace", "path": "/CFO", "value": "Barbara" },
+      { "op": "remove", "path": "/COO" }
+    ],
+    "output": [
+      { "op": "add", "path": "/CEO", "value": "John" },
+      { "op": "add", "path": "/CFO", "value": "Anna" },
+      { "op": "copy", "from": "/CFO", "path": "/CEO" },
+      { "op": "replace", "path": "/CFO", "value": "Barbara" }
+    ]
+  },
+  {
+    "description": "Should return correct JSON Patch for cancelling REMOVE op",
+    "input": [
+      { "op": "add", "path": "/foo", "value": "bar" },
+      { "op": "add", "path": "/bar", "value": "baz" },
+      { "op": "remove", "path": "/foo" }
+    ],
+    "output": [{ "op": "add", "path": "/bar", "value": "baz" }]
+  }
+]
