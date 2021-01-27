@@ -184,10 +184,12 @@ Concats multiple patches into one.
 ```javascript
 var patch1 = [{ op: "add", value: "bar", path: "/foo" }];
 var patch2 = [{ op: "remove", path: "/foo" }];
-var patch = ooPatch.concat(patch1, patch2)[
-  // patch is
-  ({ op: "add", value: "bar", path: "/foo" }, { op: "remove", path: "/foo" })
-];
+var patch = ooPatch.concat(patch1, patch2);
+// patch is
+// [
+//   { op: "add", value: "bar", path: "/foo" },
+//   { op: "remove", path: "/foo" }
+// ];
 ```
 
 [↑](#json8-patch)
